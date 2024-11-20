@@ -5,6 +5,7 @@ export interface GridDimensions {
 }
 
 export interface CubeProperties {
+    id: string;
     position: {
         x: number;
         y: number;

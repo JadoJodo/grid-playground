@@ -5,6 +5,8 @@ export class Cube3D {
     private mesh: THREE.Mesh;
     private edges: THREE.LineSegments;
     private properties: CubeProperties;
+    private isSelected: boolean = false;
+    private originalEdgeColor: string;
 
     constructor(properties: CubeProperties) {
         this.properties = properties;
@@ -56,5 +58,22 @@ export class Cube3D {
 
     setOpacity(opacity: number): void {
         (this.mesh.material as THREE.MeshPhongMaterial).opacity = opacity;
+    }
+
+    select(): void {
+        this.isSelected = true;
+        const edgeMaterial = this.edges.material as THREE.LineBasicMaterial;
+        this.originalEdgeColor = edgeMaterial.color.getHexString();
+        edgeMaterial.color.set('#2196f3');
+    }
+
+    deselect(): void {
+        this.isSelected = false;
+        const edgeMaterial = this.edges.material as THREE.LineBasicMaterial;
+        edgeMaterial.color.set(this.originalEdgeColor);
+    }
+
+    getProperties(): CubeProperties {
+        return this.properties;
     }
 }

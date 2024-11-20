@@ -50,3 +50,32 @@ button {
 button:hover {
     background: #45a049;
 }
+
+.cube-list {
+    margin: 20px 0;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.cube-item {
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    margin: 5px 0;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.cube-item.selected {
+    background: #e3f2fd;
+    border-color: #2196f3;
+}
+
+.cube-color-preview {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 10px;
+}

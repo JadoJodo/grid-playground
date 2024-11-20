@@ -11,6 +11,10 @@ export class Grid3D {
     private grid: THREE.Points;
     private cubes: Cube3D[] = [];
     private options: Grid3DOptions;
+    private raycaster: THREE.Raycaster;
+    private mouse: THREE.Vector2;
+    private selectedCube: Cube3D | null = null;
+    private onCubeSelected: ((cube: Cube3D | null) => void) | null = null;
 
     constructor(container: HTMLElement, options: Grid3DOptions) {
         this.options = options;
@@ -103,5 +107,62 @@ export class Grid3D {
         this.camera.aspect = container.clientWidth / container.clientHeight;
         this.camera.updateProjectionMatrix();
         this.renderer.setSize(container.clientWidth, container.clientHeight);
+    }
+
+    setOnCubeSelected(callback: (cube: Cube3D | null) => void): void {
+        this.onCubeSelected = callback;
+    }
+
+    private initializeRaycaster(): void {
+        this.raycaster = new THREE.Raycaster();
+        this.mouse = new THREE.Vector2();
+
+        this.renderer.domElement.addEventListener('click', (event) => {
+            const rect = this.renderer.domElement.getBoundingClientRect();
+            this.mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+            this.mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+            this.raycaster.setFromCamera(this.mouse, this.camera);
+            const intersects = this.raycaster.intersectObjects(
+                this.cubes.map(cube => cube.getMesh())
+            );
+
+            if (intersects.length > 0) {
+                const selectedMesh = intersects[0].object;
+                const selectedCube = this.cubes.find(cube => cube.getMesh() === selectedMesh);
+                this.selectCube(selectedCube || null);
+            } else {
+                this.selectCube(null);
+            }
+        });
+    }
+
+    private selectCube(cube: Cube3D | null): void {
+        if (this.selectedCube) {
+            this.selectedCube.deselect();
+        }
+        this.selectedCube = cube;
+        if (cube) {
+            cube.select();
+        }
+        if (this.onCubeSelected) {
+            this.onCubeSelected(cube);
+        }
+    }
+
+    getCubes(): Cube3D[] {
+        return this.cubes;
+    }
+
+    removeCube(cube: Cube3D): void {
+        const index = this.cubes.indexOf(cube);
+        if (index > -1) {
+            this.cubes.splice(index, 1);
+            this.scene.remove(cube.getMesh());
+            this.scene.remove(cube.getEdges());
+            if (this.selectedCube === cube) {
+                this.selectCube(null);
+            }
+        }
     }
 }
