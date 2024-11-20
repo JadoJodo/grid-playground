@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Grid Visualization</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="canvas-container"></div>
+    <div id="controls">
+        <div class="control-group">
+            <h3>Grid Settings</h3>
+            <label>X Range: <input type="number" id="xRange" value="10" min="1" max="50"></label>
+            <label>Y Range: <input type="number" id="yRange" value="10" min="1" max="50"></label>
+            <label>Z Range: <input type="number" id="zRange" value="10" min="1" max="50"></label>
+        </div>
+        <div class="control-group">
+            <h3>Cube Settings</h3>
+            <label>X Position: <input type="number" id="cubeX" value="0"></label>
+            <label>Y Position: <input type="number" id="cubeY" value="0"></label>
+            <label>Z Position: <input type="number" id="cubeZ" value="0"></label>
+            <label>Color: <input type="color" id="cubeColor" value="#ff0000"></label>
+            <button id="addCube">Add Cube</button>
+            <button id="removeCube">Remove Last Cube</button>
+        </div>
+    </div>
+    <script type="module" src="index.js"></script>
+</body>
+</html>
